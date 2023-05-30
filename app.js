@@ -11,8 +11,8 @@ const postChat = async (
 
     const openai = new OpenAIApi(configuration);
     const response = await openai.createChatCompletion({
-        engine: 'gpt-3-turbo',
-        prompt: messages
+        model: 'gpt-3.5-turbo',
+        messages: messages
     });
 
     if (response.status === 200) {
@@ -51,15 +51,9 @@ app.event('app_mention', async ({ event, say }) => {
         // スレッドの内容をChat GPT-3に投げて返信を生成する
         const messages = relies.messages.map((message) => {
             return {
-                role: message.subtype === 'bot_message' ? 'assistant' : 'user',
+                role: message.subtype === 'bot_message' ? 'bot' : 'user',
                 content: message.text,
             };
-        });
-
-        // messages の先頭に {"role": "system", "content": "You are a helpful assistant."} を追加する
-        messages.unshift({
-            role: 'system',
-            content: 'AI=Kurogane, Slack Bot. Follow: bold=*bold*, italic=_italic_, strike=~strikethrough~, code=`code`, link=<https://slack.com|link>, block=```block```, list=* item. Space around `. Start.',
         });
 
         const chat = await postChat(messages);
