@@ -51,9 +51,14 @@ app.event('app_mention', async ({ event, say }) => {
         // スレッドの内容をChat GPT-3に投げて返信を生成する
         const messages = relies.messages.map((message) => {
             return {
-                role: message.subtype === 'bot_message' ? 'bot' : 'user',
+                role: message.subtype === 'bot_message' ? 'assistant' : 'user',
                 content: message.text,
             };
+        });
+
+        messages.unshift({
+            role: 'system',
+            content: 'AI=Kurogane, Slack Bot. Follow: bold=*bold*, italic=_italic_, strike=~strikethrough~, code=`code`, link=<https://slack.com|link>, block=```block```, list=* item. Space around `. Start.',
         });
 
         const chat = await postChat(messages);
