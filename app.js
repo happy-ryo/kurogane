@@ -11,7 +11,7 @@ const postChat = async (
 
     const openai = new OpenAIApi(configuration);
     const response = await openai.createChatCompletion({
-        engine: 'gpt-4',
+        engine: 'gpt-3-turbo',
         prompt: messages
     });
 
