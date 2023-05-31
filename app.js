@@ -11,12 +11,16 @@ const postChat = async (
 
     const openai = new OpenAIApi(configuration);
     const response = await openai.createChatCompletion({
-        model: 'gpt-4',
+        model: process.env.OPENAI_MODEL_ID,
         messages: messages
     });
 
     if (response.status === 200) {
         return response.data.choices[0].message.content
+    } else {
+        console.error(response.status);
+        console.error(response.data);
+        return 'エラーが発生しました。';
     }
 }
 
